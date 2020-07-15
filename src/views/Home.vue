@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container-fluid flex-center">
-      <button class="btn btn-primary btn-new-Game" v-on:click="clearLocalStorage">New Game</button>
+      <button class="btn btn-primary " v-on:click="clearLocalStorage">New Game</button>
     </div>
     <section class="section-scorecard flex-center container-fluid">
       <BalutCard/>
@@ -23,6 +23,7 @@ export default {
             if(window.confirm('Do you want to start a new game?')){
                 localStorage.removeItem('categories-values');
                 location.reload();
+                console.log('test');
             }
         }
   }
@@ -36,8 +37,5 @@ export default {
   padding: 2rem 0 ;
 }
 
-// .btn-new-Game{
-//   text-align: center;
-//   margin: 2rem;
-// }
+
 </style>
