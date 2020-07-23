@@ -32,44 +32,44 @@
                         <tr>
                             <td id="fours" v-on:click="openModal">Fours</td>    
                             <td  v-for="(value, name) in categories.fours" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="fours-score" class="cell-width"></td>
-                            <td id="fours-points" class="cell-width"></td>
+                            <td id="fours-score" class="cell-width js-row-score"></td>
+                            <td id="fours-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
                             <td id="fives" v-on:click="openModal">Fives</td>
                             <td  v-for="(value, name) in categories.fives" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="fives-score" class="cell-width"></td>
-                            <td id="fives-points" class="cell-width"></td>
+                            <td id="fives-score" class="cell-width js-row-score"></td>
+                            <td id="fives-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
                             <td id="sixes" v-on:click="openModal">Sixes</td>
                             <td  v-for="(value, name) in categories.sixes" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="sixes-score" class="cell-width"></td>
-                            <td id="sixes-points" class="cell-width"></td>
+                            <td id="sixes-score" class="cell-width js-row-score"></td>
+                            <td id="sixes-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
                             <td id="straight" v-on:click="openModal">Straight</td>
                             <td  v-for="(value, name) in categories.straight" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="straight-score" class="cell-width"></td>
-                            <td id="straight-points" class="cell-width"></td>
+                            <td id="straight-score" class="cell-width js-row-score"></td>
+                            <td id="straight-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
                             <td id="fullhouse" v-on:click="openModal">Full House</td>
                             <td  v-for="(value, name) in categories.fullhouse" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="fullhouse-score" class="cell-width"></td>
-                            <td id="fullhouse-points" class="cell-width"></td>
+                            <td id="fullhouse-score" class="cell-width js-row-score"></td>
+                            <td id="fullhouse-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
                             <td id="choice" v-on:click="openModal">Choice</td>
                             <td  v-for="(value, name) in categories.choice" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="choice-score" class="cell-width"></td>
-                            <td id="choice-points" class="cell-width"></td>
+                            <td id="choice-score" class="cell-width js-row-score"></td>
+                            <td id="choice-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
                             <td id="balut" v-on:click="openModal">Balut</td>
                             <td  v-for="(value, name) in categories.balut" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="balut-score" class="cell-width"></td>
-                            <td id="balut-points" class="cell-width"></td>
+                            <td id="balut-score" class="cell-width js-row-score"></td>
+                            <td id="balut-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
                             <td class="scorebg1" colspan="5">Total Score</td>
@@ -243,7 +243,7 @@ export default {
                 let category = this.$data.categories[this.modal.categoryName];
                 category[this.modal.categoryPlace] = inputValue;
 
-                this.calculateScore(category);
+                this.calculateRowScore(category);
 
                 this.closeModal();     
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));           
@@ -268,7 +268,7 @@ export default {
                 target.innerHTML = "Enable Strike-out"                
             }
         },
-        calculateScore: function(category){
+        calculateRowScore: function(category){
             let rowScore = 0;
             for (const [key, value] of Object.entries(category)) {
                 console.log(`${key}: ${value}`);
@@ -284,6 +284,8 @@ export default {
             let divName = this.modal.categoryName + "-score";
             console.log(divName);
             document.getElementById(divName).innerHTML = rowScore;
+            
+            this.calculateTotalScore();
         },
         clearLocalStorage: function(){
             localStorage.removeItem(STORAGE_KEY);
@@ -293,9 +295,26 @@ export default {
             let categories = this.categories;
             Object.keys(categories).forEach(key => {
                 this.modal.categoryName = key;
-                this.calculateScore(categories[key]);
+                this.calculateRowScore(categories[key]);
                 console.log(key);        // the name of the current key.
-            });
+            });           
+        },
+        calculateTotalScore: function(){
+            let totalScore = 0;
+            let allScores = document.querySelectorAll('.js-row-score');
+            for (var i = 0; i < allScores.length; i++) {
+                totalScore = totalScore + parseInt(allScores[i].innerHTML);
+            }        
+            document.getElementById("total-score").innerHTML = totalScore;
+        },
+        toggleAddFunctionalityOnRow: function(){
+
+        },
+        calculateRowPoints: function(){
+
+        },
+        calculateTotalPoints: function(){
+
         }
       },
      
