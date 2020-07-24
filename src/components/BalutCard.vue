@@ -297,6 +297,7 @@ export default {
             console.log(divName);
             document.getElementById(divName).innerHTML = rowScore;
             
+            this.toggleAddFunctionalityOnRow(category);
             this.calculateTotalScore();
         },
         clearLocalStorage: function(){
@@ -333,20 +334,44 @@ export default {
             //todo: when edit feature has been added it needs to be able to restore the add functionality back
         },
         calculateRowPoints: function(rowName){
-            let rowNameWithScore = rowName + '-score'
-            let rowNameWithPoints = rowName + '-points'
+            let rowNameWithScore = rowName + '-score';
+            let rowNameWithPoints = rowName + '-points';
+            let minRowScore = 0;
+
             switch(rowName){
-                case "fours":
-                    let rowScore = document.getElementById(rowNameWithScore).innerHTML;
+                case 'fours':
+                    minRowScore = 52;
+                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore);
+                    break;  
+                case 'fives':
+                    minRowScore = 65;
+                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore);
+                    break;
+                case 'sixes':
+                    minRowScore = 78;
+                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore);
+                    break;
+                case 'straight':
+                    break;
+                case 'fullhouse':
+                    break;
+                case 'choice':
+                    minRowScore = 100;
+                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore);
+                    break;
+                case 'balut':
+                    break;   
+            }
+        },
+        addRowPointsToHtml: function(rowNameWithScore, rowNameWithPoints, minRowScore){
+             let rowScore = document.getElementById(rowNameWithScore).innerHTML;
                     console.log('RowScore: ' + rowScore);
-                    if(parseInt(rowScore) >= 52){
+                    if(parseInt(rowScore) >= minRowScore){
                         document.getElementById(rowNameWithPoints).innerHTML = 2; 
                     }
                     else{
                         document.getElementById(rowNameWithPoints).innerHTML = 0;
-                    }
-                    break;  
-            }
+                    };                    
         },
         calculateTotalPoints: function(){
 
