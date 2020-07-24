@@ -327,10 +327,26 @@ export default {
 
             if(typeof cellName == 'undefined'){
                 this.categoryButton[rowName] = null;
+                this.calculateRowPoints(rowName);
             }
-        },
-        calculateRowPoints: function(){
 
+            //todo: when edit feature has been added it needs to be able to restore the add functionality back
+        },
+        calculateRowPoints: function(rowName){
+            let rowNameWithScore = rowName + '-score'
+            let rowNameWithPoints = rowName + '-points'
+            switch(rowName){
+                case "fours":
+                    let rowScore = document.getElementById(rowNameWithScore).innerHTML;
+                    console.log('RowScore: ' + rowScore);
+                    if(parseInt(rowScore) >= 52){
+                        document.getElementById(rowNameWithPoints).innerHTML = 2; 
+                    }
+                    else{
+                        document.getElementById(rowNameWithPoints).innerHTML = 0;
+                    }
+                    break;  
+            }
         },
         calculateTotalPoints: function(){
 
