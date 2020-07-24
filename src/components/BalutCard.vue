@@ -344,12 +344,13 @@ export default {
                 this.calculateTotalPoints();
             }
 
-            //todo: when edit feature has been added it needs to be able to restore the add functionality back
+            //todo: when edit feature has been added it needs to be able to restore the add functionality 
         },
         calculateRowPoints: function(rowName){
             let rowNameWithScore = rowName + '-score';
             let rowNameWithPoints = rowName + '-points';
             let minRowScore = 0;
+            let strikeOutCheck;
 
             switch(rowName){
                 case 'fours':
@@ -365,8 +366,25 @@ export default {
                     this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore, rowName);
                     break;
                 case 'straight':
+                    strikeOutCheck = Object.values(this.categories[rowName]).find(value => value === "/");
+                    console.log(strikeOutCheck);
+                    if(typeof strikeOutCheck == 'undefined'){
+                        document.getElementById(rowNameWithPoints).innerHTML = 4; 
+                        this.categoryPoints[rowName] = 4;
+                    }
+                    else{
+                        document.getElementById(rowNameWithPoints).innerHTML = 0;                         
+                    }                 
                     break;
                 case 'fullhouse':
+                    strikeOutCheck = Object.values(this.categories[rowName]).find(value => value === "/");
+                    if(typeof strikeOutCheck == 'undefined'){
+                        document.getElementById(rowNameWithPoints).innerHTML = 3; 
+                        this.categoryPoints[rowName] = 3;
+                    }
+                    else{
+                        document.getElementById(rowNameWithPoints).innerHTML = 0;                         
+                    }  
                     break;
                 case 'choice':
                     minRowScore = 100;
