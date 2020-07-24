@@ -77,8 +77,8 @@
                             <td id="total-points" class="scorebg1"></td>
                         </tr>
                         <tr>
-                            <td class="scorebg1" colspan="5">Total Points</td>
-                            <td id="final-points" class="scorebg1" colspan="2"></td>
+                            <td class="scorebg1" colspan="6">Total Points</td>
+                            <td id="final-points" class="scorebg1" ></td>
                         </tr>
                     </tbody>
                 </table>
@@ -152,6 +152,16 @@ export default {
               choice:0,
               balut:0
           },
+          categoryPoints:{
+              fours:0,
+              fives:0,
+              sixes:0,
+              straight:0,
+              fullhouse:0,
+              choice:0,
+              balut:0,
+              totalScore:0
+          },
           categoryButton:{
               fours:1,
               fives:1,
@@ -170,6 +180,7 @@ export default {
   },
   mounted (){
     this.calculateLocalStorageRowScore();
+    this.calculateTotalPoints();
   },
 //   watch: {
 //     // whenever question changes, this function will run
@@ -314,6 +325,7 @@ export default {
         },
         calculateTotalScore: function(){
             let totalScore = 0;
+            //Should use the values from this.categoryScore instead of fetching them from the html
             let allScores = document.querySelectorAll('.js-row-score');
             for (var i = 0; i < allScores.length; i++) {
                 totalScore = totalScore + parseInt(allScores[i].innerHTML);
@@ -329,6 +341,7 @@ export default {
             if(typeof cellName == 'undefined'){
                 this.categoryButton[rowName] = null;
                 this.calculateRowPoints(rowName);
+                this.calculateTotalPoints();
             }
 
             //todo: when edit feature has been added it needs to be able to restore the add functionality back
@@ -341,15 +354,15 @@ export default {
             switch(rowName){
                 case 'fours':
                     minRowScore = 52;
-                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore);
+                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore, rowName);
                     break;  
                 case 'fives':
                     minRowScore = 65;
-                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore);
+                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore, rowName);
                     break;
                 case 'sixes':
                     minRowScore = 78;
-                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore);
+                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore, rowName);
                     break;
                 case 'straight':
                     break;
@@ -357,24 +370,30 @@ export default {
                     break;
                 case 'choice':
                     minRowScore = 100;
-                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore);
+                    this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore, rowName);
                     break;
                 case 'balut':
                     break;   
             }
         },
-        addRowPointsToHtml: function(rowNameWithScore, rowNameWithPoints, minRowScore){
+        addRowPointsToHtml: function(rowNameWithScore, rowNameWithPoints, minRowScore, rowName){
              let rowScore = document.getElementById(rowNameWithScore).innerHTML;
                     console.log('RowScore: ' + rowScore);
                     if(parseInt(rowScore) >= minRowScore){
                         document.getElementById(rowNameWithPoints).innerHTML = 2; 
+                        this.categoryPoints[rowName] = 2;
                     }
                     else{
                         document.getElementById(rowNameWithPoints).innerHTML = 0;
                     };                    
         },
         calculateTotalPoints: function(){
-
+            let totalPoints = 0;
+            const allPoints = this.categoryPoints;
+            Object.values(allPoints).forEach(value => {
+                totalPoints = totalPoints + value;
+            });   
+            document.getElementById('final-points').innerHTML = totalPoints;
         }
       },
      
