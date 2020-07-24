@@ -225,6 +225,8 @@ export default {
                 modalPopup.classList.add('show');
                 modalPopup.style.display = 'block';
                 modalPopup.removeAttribute('aria-hidden');
+
+                document.getElementById('inputValue').focus();
                 
         },
         closeModal: function(){
@@ -391,6 +393,19 @@ export default {
                     this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore, rowName);
                     break;
                 case 'balut':
+                    let balutTotalPoints = 0;
+                    const balut = this.categories.balut;
+                        Object.values(balut).forEach(value => {
+                            let valueAsInt = parseInt(value);
+                             //Check if value is equal to self, if true it's not NaN and we add it to the total
+                            //http://adripofjavascript.com/blog/drips/the-problem-with-testing-for-nan-in-javascript.html
+                            if(valueAsInt === valueAsInt){
+                                balutTotalPoints = balutTotalPoints + 2;
+                                console.log('balut total points = ' + balutTotalPoints)
+                            }
+                        });
+                    document.getElementById(rowNameWithPoints).innerHTML = balutTotalPoints; 
+                    this.categoryPoints[rowName] = balutTotalPoints;                                               
                     break;   
             }
         },
