@@ -30,43 +30,43 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td id="fours" v-on:click="openModal">Fours</td>    
+                            <td id="fours" v-on="this.categoryButton.fours != null ? { click: openModal} : {}">Fours</td>    
                             <td  v-for="(value, name) in categories.fours" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
                             <td id="fours-score" class="cell-width js-row-score"></td>
                             <td id="fours-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
-                            <td id="fives" v-on:click="openModal">Fives</td>
+                            <td id="fives"  v-on="this.categoryButton.fives != null ? { click: openModal} : {}">Fives</td>
                             <td  v-for="(value, name) in categories.fives" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
                             <td id="fives-score" class="cell-width js-row-score"></td>
                             <td id="fives-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
-                            <td id="sixes" v-on:click="openModal">Sixes</td>
+                            <td id="sixes"  v-on="this.categoryButton.sixes != null ? { click: openModal} : {}">Sixes</td>
                             <td  v-for="(value, name) in categories.sixes" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
                             <td id="sixes-score" class="cell-width js-row-score"></td>
                             <td id="sixes-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
-                            <td id="straight" v-on:click="openModal">Straight</td>
+                            <td id="straight"  v-on="this.categoryButton.straight != null ? { click: openModal} : {}">Straight</td>
                             <td  v-for="(value, name) in categories.straight" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
                             <td id="straight-score" class="cell-width js-row-score"></td>
                             <td id="straight-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
-                            <td id="fullhouse" v-on:click="openModal">Full House</td>
+                            <td id="fullhouse"  v-on="this.categoryButton.fullhouse != null ? { click: openModal} : {}">Full House</td>
                             <td  v-for="(value, name) in categories.fullhouse" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
                             <td id="fullhouse-score" class="cell-width js-row-score"></td>
                             <td id="fullhouse-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
-                            <td id="choice" v-on:click="openModal">Choice</td>
+                            <td id="choice"  v-on="this.categoryButton.choice != null ? { click: openModal} : {}">Choice</td>
                             <td  v-for="(value, name) in categories.choice" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
                             <td id="choice-score" class="cell-width js-row-score"></td>
                             <td id="choice-points" class="cell-width js-row-points"></td>
                         </tr>
                         <tr>
-                            <td id="balut" v-on:click="openModal">Balut</td>
+                            <td id="balut"  v-on="this.categoryButton.balut != null ? { click: openModal} : {}">Balut</td>
                             <td  v-for="(value, name) in categories.balut" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
                             <td id="balut-score" class="cell-width js-row-score"></td>
                             <td id="balut-points" class="cell-width js-row-points"></td>
@@ -151,8 +151,16 @@ export default {
               fullhouse:0,
               choice:0,
               balut:0
-          }
-        
+          },
+          categoryButton:{
+              fours:1,
+              fives:1,
+              sixes:1,
+              straight:1,
+              fullhouse:1,
+              choice:1,
+              balut:1
+          }        
       }      
   },
   created (){      
@@ -189,7 +197,8 @@ export default {
                 strikeOutButton.classList.add('btn-secondary');
                 strikeOutButton.innerHTML = "Enable Strike-out";
 
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));           
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));
+                this.toggleAddFunctionalityOnRow(category);           
                 
                 return;
             }
@@ -232,7 +241,7 @@ export default {
 
                 //loop through to figure out where to add the input value
                 var cellName = Object.keys(data).find(key => data[key] === "");
-                console.log(cellName);
+                console.log('cellName: ' + cellName);
                 this.modal.categoryPlace = cellName;
         },
         addScoreToRow: function(){
@@ -244,9 +253,12 @@ export default {
                 category[this.modal.categoryPlace] = inputValue;
 
                 this.calculateRowScore(category);
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));  
 
+                //Remove add functionality when all cells in row have values
+                this.toggleAddFunctionalityOnRow(category);
+                         
                 this.closeModal();     
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));           
             }
             else{
                 console.log("Missing value");
@@ -291,7 +303,7 @@ export default {
             localStorage.removeItem(STORAGE_KEY);
         },
         calculateLocalStorageRowScore: function(){
-            //Calcucate the row score from the local storage data
+            //Calculate the row score from the local storage data
             let categories = this.categories;
             Object.keys(categories).forEach(key => {
                 this.modal.categoryName = key;
@@ -307,8 +319,15 @@ export default {
             }        
             document.getElementById("total-score").innerHTML = totalScore;
         },
-        toggleAddFunctionalityOnRow: function(){
+        toggleAddFunctionalityOnRow: function(category){
+            let rowName = this.modal.categoryName;
 
+            var cellName = Object.keys(category).find(key => category[key] === "");
+            console.log(cellName);
+
+            if(typeof cellName == 'undefined'){
+                this.categoryButton[rowName] = null;
+            }
         },
         calculateRowPoints: function(){
 
