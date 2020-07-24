@@ -444,31 +444,31 @@ export default {
                     document.getElementById('total-points').innerHTML = -1;
                     break;
                 case (totalScore >= 350 && totalScore < 400): 
-                    this.categoryPoints.totalScore = -1;
+                    this.categoryPoints.totalScore = 0;
                     document.getElementById('total-points').innerHTML = 0;
                     break;
                 case (totalScore >= 400 && totalScore < 450): 
-                    this.categoryPoints.totalScore = -1;
+                    this.categoryPoints.totalScore = 1;
                     document.getElementById('total-points').innerHTML = 1;
                     break;
                 case (totalScore >= 450 && totalScore < 500): 
-                    this.categoryPoints.totalScore = -1;
+                    this.categoryPoints.totalScore = 2;
                     document.getElementById('total-points').innerHTML = 2;
                     break;
                 case (totalScore >= 500 && totalScore < 550): 
-                    this.categoryPoints.totalScore = -1;
+                    this.categoryPoints.totalScore = 3;
                     document.getElementById('total-points').innerHTML = 3;
                     break;
                 case (totalScore >= 550 && totalScore < 600): 
-                    this.categoryPoints.totalScore = -1;
+                    this.categoryPoints.totalScore = 4;
                     document.getElementById('total-points').innerHTML = 4;
                     break;
                 case (totalScore >= 600 && totalScore < 650): 
-                    this.categoryPoints.totalScore = -1;
+                    this.categoryPoints.totalScore = 5;
                     document.getElementById('total-points').innerHTML = 5;
                     break;
                 case (totalScore >= 650 && totalScore < 812): 
-                    this.categoryPoints.totalScore = -1;
+                    this.categoryPoints.totalScore = 6;
                     document.getElementById('total-points').innerHTML = 6;
                     break;                    
             }
