@@ -31,7 +31,7 @@
                     <tbody>
                         <tr>
                             <td id="fours" v-on="this.categoryButton.fours != null ? { click: openModal} : {}">Fours</td>    
-                            <td  v-for="(value, name) in categories.fours" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
+                            <td  v-for="(value, name) in categories.fours" :key="name" v-on:click="addScoreToCell" v-bind:id="name" class="cell-width" data-row="fours">{{value}}</td>
                             <td id="fours-score" class="cell-width js-row-score"></td>
                             <td id="fours-points" class="cell-width js-row-points"></td>
                         </tr>
@@ -193,9 +193,9 @@ export default {
 //         }     
 //     },
   methods: {
-        openModal: function(event){
-            let rowName = event.target.id;            
-            this.addCategoryToModal(rowName);
+        openModal: function(){
+            //let rowName = event.target.id;            
+            //this.addCategoryToModal(rowName);
 
             if(this.modal.strikeOut === "on"){
                 let category = this.$data.categories[this.modal.categoryName];
@@ -246,22 +246,24 @@ export default {
                 this.modal.categoryPlace = "";
                 document.getElementById('inputValue').value = "";
         },
-        addCategoryToModal: function (rowName) {
+        addCategoryToModal: function (rowName,) {
                 //find id and get values from the data
                 var data = this.$data.categories[rowName];
-                console.log(data);
+                //console.log(data);
                 this.modal.categoryName = rowName;
 
                 //loop through to figure out where to add the input value
-                var cellName = Object.keys(data).find(key => data[key] === "");
-                console.log('cellName: ' + cellName);
+                //var cellName = Object.keys(data).find(key => data[key] === "");
+                //console.log('cellName: ' + cellName);
+
+                let cellName = 
                 this.modal.categoryPlace = cellName;
         },
         addScoreToRow: function(){
             let inputValue = document.getElementById('inputValue').value;
 
             if(inputValue !== ""){
-                console.log(inputValue);
+                //console.log(inputValue);
                 let category = this.$data.categories[this.modal.categoryName];
                 category[this.modal.categoryPlace] = inputValue;
 
@@ -275,7 +277,7 @@ export default {
                 this.closeModal();     
             }
             else{
-                console.log("Missing value");
+                //console.log("Missing value");
             }
         },
         toggleStrikeOut: function(event){
@@ -297,18 +299,18 @@ export default {
         calculateRowScore: function(category){
             let rowScore = 0;
             for (const [key, value] of Object.entries(category)) {
-                console.log(`${key}: ${value}`);
+                //console.log(`${key}: ${value}`);
                 let intValue = parseInt(value);
                 //Check if value is equal to self, if true it's not NaN and we add it to the total
                 //http://adripofjavascript.com/blog/drips/the-problem-with-testing-for-nan-in-javascript.html
                 if(intValue === intValue){
                     rowScore = rowScore + intValue;
                 }                
-                console.log(rowScore);
+                //console.log(rowScore);
             };
             this.categoriesScore[this.modal.categoryName] = rowScore;
             let divName = this.modal.categoryName + "-score";
-            console.log(divName);
+            //console.log(divName);
             document.getElementById(divName).innerHTML = rowScore;
             
             this.toggleAddFunctionalityOnRow(category);
@@ -323,7 +325,7 @@ export default {
             Object.keys(categories).forEach(key => {
                 this.modal.categoryName = key;
                 this.calculateRowScore(categories[key]);
-                console.log(key);        // the name of the current key.
+                //console.log(key);        // the name of the current key.
             });           
         },
         calculateTotalScore: function(){
@@ -339,7 +341,7 @@ export default {
             let rowName = this.modal.categoryName;
 
             var cellName = Object.keys(category).find(key => category[key] === "");
-            console.log(cellName);
+            //console.log(cellName);
 
             if(typeof cellName == 'undefined'){
                 this.categoryButton[rowName] = null;
@@ -370,7 +372,7 @@ export default {
                     break;
                 case 'straight':
                     strikeOutCheck = Object.values(this.categories[rowName]).find(value => value === "/");
-                    console.log(strikeOutCheck);
+                    //console.log(strikeOutCheck);
                     if(typeof strikeOutCheck == 'undefined'){
                         document.getElementById(rowNameWithPoints).innerHTML = 4; 
                         this.categoryPoints[rowName] = 4;
@@ -402,7 +404,7 @@ export default {
                             //http://adripofjavascript.com/blog/drips/the-problem-with-testing-for-nan-in-javascript.html
                             if(valueAsInt === valueAsInt){
                                 balutTotalPoints = balutTotalPoints + 2;
-                                console.log('balut total points = ' + balutTotalPoints)
+                                //console.log('balut total points = ' + balutTotalPoints)
                             }
                         });
                     document.getElementById(rowNameWithPoints).innerHTML = balutTotalPoints; 
@@ -412,7 +414,7 @@ export default {
         },
         addRowPointsToHtml: function(rowNameWithScore, rowNameWithPoints, minRowScore, rowName){
              let rowScore = document.getElementById(rowNameWithScore).innerHTML;
-                    console.log('RowScore: ' + rowScore);
+                    //console.log('RowScore: ' + rowScore);
                     if(parseInt(rowScore) >= minRowScore){
                         document.getElementById(rowNameWithPoints).innerHTML = 2; 
                         this.categoryPoints[rowName] = 2;
@@ -432,7 +434,7 @@ export default {
         },
         calculatePointsForTotalScore: function(){
             const totalScore = parseInt(document.getElementById('total-score').innerHTML);
-            console.log(typeof totalScore + ' : ' + totalScore)
+            //console.log(typeof totalScore + ' : ' + totalScore)
 
             switch(true){
                 case (totalScore < 300): 
@@ -472,6 +474,19 @@ export default {
                     document.getElementById('total-points').innerHTML = 6;
                     break;                    
             }
+        },
+        addScoreToCell: function(event){
+            let target = event.target;
+            let rowName = target.getAttribute('data-row');
+            let cellName = target.id;
+
+            this.openModal();
+
+            this.modal.categoryName = rowName;
+            this.modal.categoryPlace = cellName;
+
+            //this.addCategoryToModal(rowName);
+
         }
       },
      
