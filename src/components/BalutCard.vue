@@ -4,16 +4,17 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Insert value</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Insert value in {{modal.categoryName}}</h5>
         <button type="button" class="close" v-on:click="closeModal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body d-flex justify-content-between">
         <input id="inputValue" type="number">
+        <button id="strikeOutButton" class="btn btn-warning" v-on:click="addStrikeOutToRow">Strikeout</button>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" v-on:click="closeModal">Close</button>
+      <div class="modal-footer d-flex justify-content-start">
+        <button type="button" class="btn btn-secondary" v-on:click="closeModal">Cancel</button>
         <button type="button" v-on:click="addScoreToRow" class="btn btn-primary">Save</button>
       </div>
     </div>
@@ -52,7 +53,6 @@
                     </tbody>
                 </table>
         </div>
-     <button id="strikeOutButton" class="btn btn-secondary" v-on:click="toggleStrikeOut">Enable Strikeout</button>
 </div>
 </template>
 
@@ -166,22 +166,22 @@ export default {
             //let rowName = event.target.id;            
             //this.addCategoryToModal(rowName);
 
-            if(this.modal.strikeOut === "on"){
-                let category = this.$data.categories[this.modal.categoryName];
-                category[this.modal.categoryPlace] = "/";
+            // if(this.modal.strikeOut === "on"){
+            //     let category = this.$data.categories[this.modal.categoryName];
+            //     category[this.modal.categoryPlace] = "/";
 
-                //strikeout button and setting
-                this.modal.strikeOut = "off";                
-                let strikeOutButton = document.getElementById('strikeOutButton');
-                strikeOutButton.classList.remove('btn-warning');
-                strikeOutButton.classList.add('btn-secondary');
-                strikeOutButton.innerHTML = "Enable Strike-out";
+            //     //strikeout button and setting
+            //     this.modal.strikeOut = "off";                
+            //     let strikeOutButton = document.getElementById('strikeOutButton');
+            //     strikeOutButton.classList.remove('btn-warning');
+            //     strikeOutButton.classList.add('btn-secondary');
+            //     strikeOutButton.innerHTML = "Enable Strike-out";
 
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));
-                this.toggleAddFunctionalityOnRow(category);           
+            //     localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));
+            //     this.toggleAddFunctionalityOnRow(category);           
                 
-                return;
-            }
+            //     return;
+            // }
 
                 let body = document.getElementsByTagName('body');
                 body[0].classList.add('modal-open');
@@ -248,6 +248,16 @@ export default {
             else{
                 //console.log("Missing value");
             }
+        },
+        addStrikeOutToRow: function(){
+            let categoryName = this.modal.categoryName
+            let category = this.$data.categories[categoryName];
+            category[this.modal.categoryPlace] = "/";
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));
+            this.calculateRowScore(category);
+            this.calculateTotalPoints();            
+            this.closeModal();                          
         },
         toggleStrikeOut: function(event){
             if(this.modal.strikeOut === "off"){
@@ -467,6 +477,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .cell-width{
-  min-width: 50px;
+    min-width: 50px;
+}
+td::first-letter{
+    text-transform: capitalize;
 }
 </style>
