@@ -110,7 +110,6 @@ export default {
           modal:{
               categoryName: "",
               categoryPlace:"",
-              strikeOut:"off"
           },
           categoriesScore:{
               fours:0,
@@ -163,26 +162,6 @@ export default {
 //     },
   methods: {
         openModal: function(){
-            //let rowName = event.target.id;            
-            //this.addCategoryToModal(rowName);
-
-            // if(this.modal.strikeOut === "on"){
-            //     let category = this.$data.categories[this.modal.categoryName];
-            //     category[this.modal.categoryPlace] = "/";
-
-            //     //strikeout button and setting
-            //     this.modal.strikeOut = "off";                
-            //     let strikeOutButton = document.getElementById('strikeOutButton');
-            //     strikeOutButton.classList.remove('btn-warning');
-            //     strikeOutButton.classList.add('btn-secondary');
-            //     strikeOutButton.innerHTML = "Enable Strike-out";
-
-            //     localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));
-            //     this.toggleAddFunctionalityOnRow(category);           
-                
-            //     return;
-            // }
-
                 let body = document.getElementsByTagName('body');
                 body[0].classList.add('modal-open');
                 
@@ -215,19 +194,6 @@ export default {
                 this.modal.categoryPlace = "";
                 document.getElementById('inputValue').value = "";
         },
-        addCategoryToModal: function (rowName,) {
-                //find id and get values from the data
-                var data = this.$data.categories[rowName];
-                //console.log(data);
-                this.modal.categoryName = rowName;
-
-                //loop through to figure out where to add the input value
-                //var cellName = Object.keys(data).find(key => data[key] === "");
-                //console.log('cellName: ' + cellName);
-
-                let cellName = 
-                this.modal.categoryPlace = cellName;
-        },
         addScoreToRow: function(){
             let inputValue = document.getElementById('inputValue').value;
 
@@ -258,22 +224,6 @@ export default {
             this.calculateRowScore(category);
             this.calculateTotalPoints();            
             this.closeModal();                          
-        },
-        toggleStrikeOut: function(event){
-            if(this.modal.strikeOut === "off"){
-                this.modal.strikeOut = "on";
-                let target = event.target;
-                target.classList.remove('btn-secondary');
-                target.classList.add('btn-warning');
-                target.innerHTML = "Disable Strike-out"
-            }
-            else{
-                this.modal.strikeOut = "off";                
-                let target = event.target;
-                target.classList.remove('btn-warning');
-                target.classList.add('btn-secondary');
-                target.innerHTML = "Enable Strike-out"                
-            }
         },
         calculateRowScore: function(category){
             let rowScore = 0;
@@ -463,9 +413,6 @@ export default {
 
             this.modal.categoryName = rowName;
             this.modal.categoryPlace = cellName;
-
-            //this.addCategoryToModal(rowName);
-
         }
       },
      
