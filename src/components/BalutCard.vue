@@ -29,48 +29,17 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td id="fours" v-on="this.categoryButton.fours != null ? { click: openModal} : {}">Fours</td>    
-                            <td  v-for="(value, name) in categories.fours" :key="name" v-on:click="addScoreToCell" v-bind:id="name" class="cell-width" data-row="fours">{{value}}</td>
-                            <td id="fours-score" class="cell-width js-row-score"></td>
-                            <td id="fours-points" class="cell-width js-row-points"></td>
-                        </tr>
-                        <tr>
-                            <td id="fives"  v-on="this.categoryButton.fives != null ? { click: openModal} : {}">Fives</td>
-                            <td  v-for="(value, name) in categories.fives" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="fives-score" class="cell-width js-row-score"></td>
-                            <td id="fives-points" class="cell-width js-row-points"></td>
-                        </tr>
-                        <tr>
-                            <td id="sixes"  v-on="this.categoryButton.sixes != null ? { click: openModal} : {}">Sixes</td>
-                            <td  v-for="(value, name) in categories.sixes" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="sixes-score" class="cell-width js-row-score"></td>
-                            <td id="sixes-points" class="cell-width js-row-points"></td>
-                        </tr>
-                        <tr>
-                            <td id="straight"  v-on="this.categoryButton.straight != null ? { click: openModal} : {}">Straight</td>
-                            <td  v-for="(value, name) in categories.straight" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="straight-score" class="cell-width js-row-score"></td>
-                            <td id="straight-points" class="cell-width js-row-points"></td>
-                        </tr>
-                        <tr>
-                            <td id="fullhouse"  v-on="this.categoryButton.fullhouse != null ? { click: openModal} : {}">Full House</td>
-                            <td  v-for="(value, name) in categories.fullhouse" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="fullhouse-score" class="cell-width js-row-score"></td>
-                            <td id="fullhouse-points" class="cell-width js-row-points"></td>
-                        </tr>
-                        <tr>
-                            <td id="choice"  v-on="this.categoryButton.choice != null ? { click: openModal} : {}">Choice</td>
-                            <td  v-for="(value, name) in categories.choice" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="choice-score" class="cell-width js-row-score"></td>
-                            <td id="choice-points" class="cell-width js-row-points"></td>
-                        </tr>
-                        <tr>
-                            <td id="balut"  v-on="this.categoryButton.balut != null ? { click: openModal} : {}">Balut</td>
-                            <td  v-for="(value, name) in categories.balut" :key="name" v-bind:id="name" class="cell-width">{{value}}</td>
-                            <td id="balut-score" class="cell-width js-row-score"></td>
-                            <td id="balut-points" class="cell-width js-row-points"></td>
-                        </tr>
+                        <tr v-for="(value, parent_name) in categories" v-bind:key="parent_name">
+                            <td v-bind:id="parent_name">{{parent_name}}</td>    
+                            <td v-for="(value, name) in categories[parent_name]" 
+                                :key="name" 
+                                v-on:click="addScoreToCell" 
+                                v-bind:id="name"
+                                class="cell-width" 
+                                v-bind:data-row="parent_name">{{value}}</td>
+                            <td v-bind:id="parent_name + '-score'" class="cell-width js-row-score"></td>
+                            <td v-bind:id="parent_name + '-points'" class="cell-width js-row-points"></td>
+                        </tr>                                              
                         <tr>
                             <td class="scorebg1" colspan="5">Total Score</td>
                             <td id="total-score" class="scorebg1"></td>
