@@ -41,14 +41,14 @@
                             <td v-bind:id="parent_name + '-score'" class="cell-width bg-light js-row-score">0</td>
                             <td v-bind:id="parent_name + '-points'" class="cell-width bg-light js-row-points">0</td>
                         </tr>                                              
-                        <tr>
+                        <tr class="bg-color--secondary-fade">
                             <td class="font-weight-bold" colspan="5">Total Score</td>
-                            <td id="total-score" class="bg-light"></td>
-                            <td id="total-points" class="bg-light"></td>
+                            <td id="total-score" ></td>
+                            <td id="total-points" ></td>
                         </tr>
-                        <tr>
-                            <td class="bg-color--secondary text-light" colspan="6">Total Points</td>
-                            <td id="final-points" class="bg-color--secondary text-light" ></td>
+                        <tr class="bg-color--secondary font-weight-bold">
+                            <td colspan="6">Total Points</td>
+                            <td id="final-points"></td>
                         </tr>
                     </tbody>
                 </table>
@@ -420,6 +420,7 @@ export default {
 <style scoped lang="scss">
 $primary: #2F8EBD;
 $secondary:#28C9A8;
+$secondary-fade: #79e7d0;
 
 .cell-width{
     min-width: 50px;
@@ -436,5 +437,7 @@ td::first-letter{
 .bg-color--secondary{
     background: $secondary;
 }
-
+.bg-color--secondary-fade{
+    background: $secondary-fade; 
+}
 </style>
