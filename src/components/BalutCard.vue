@@ -129,16 +129,7 @@ export default {
               choice:0,
               balut:0,
               totalScore:0
-          },
-          categoryButton:{
-              fours:1,
-              fives:1,
-              sixes:1,
-              straight:1,
-              fullhouse:1,
-              choice:1,
-              balut:1
-          }        
+          }   
       }      
   },
   created (){      
@@ -147,7 +138,7 @@ export default {
     }
   },
   mounted (){
-    this.calculateLocalStorageRowScore();
+    this.calculateLocalStorageRowScoreAndPoints();
     this.calculateTotalPoints();
   },
 //   watch: {
@@ -197,25 +188,19 @@ export default {
                 inputValue.type = "number"
         },
         addScoreToRow: function(){
-            let inputValue = document.getElementById('inputValue').value;
-
-            // if(inputValue !== ""){
-                //console.log(inputValue);
-                let category = this.$data.categories[this.modal.categoryName];
+                let inputValue = document.getElementById('inputValue').value;
+                let rowName = this.modal.categoryName;
+                
+                let category = this.$data.categories[rowName];
                 category[this.modal.categoryPlace] = inputValue;
 
                 this.calculateRowScore(category);
+                this.calculateRowPoints(rowName);
                 this.calculateTotalPoints();
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));  
-                
-                //Remove add functionality when all cells in row have values
-                this.toggleAddFunctionalityOnRow(category);
                          
                 this.closeModal();     
-            // }
-            // else{
-            //     //console.log("Missing value");
-            // }
+
         },
         addStrikeOutToRow: function(){
             let categoryName = this.modal.categoryName
@@ -224,39 +209,36 @@ export default {
 
             localStorage.setItem(STORAGE_KEY, JSON.stringify(this.categories));
             this.calculateRowScore(category);
+            this.calculateRowPoints(categoryName);
             this.calculateTotalPoints();            
             this.closeModal();                          
         },
         calculateRowScore: function(category){
             let rowScore = 0;
             for (const [key, value] of Object.entries(category)) {
-                //console.log(`${key}: ${value}`);
                 let intValue = parseInt(value);
                 //Check if value is equal to self, if true it's not NaN and we add it to the total
                 //http://adripofjavascript.com/blog/drips/the-problem-with-testing-for-nan-in-javascript.html
                 if(intValue === intValue){
                     rowScore = rowScore + intValue;
                 }                
-                //console.log(rowScore);
             };
             this.categoriesScore[this.modal.categoryName] = rowScore;
             let divName = this.modal.categoryName + "-score";
-            //console.log(divName);
             document.getElementById(divName).innerHTML = rowScore;
             
-            this.toggleAddFunctionalityOnRow(category);
             this.calculateTotalScore();
         },
         clearLocalStorage: function(){
             localStorage.removeItem(STORAGE_KEY);
         },
-        calculateLocalStorageRowScore: function(){
+        calculateLocalStorageRowScoreAndPoints: function(){
             //Calculate the row score from the local storage data
             let categories = this.categories;
             Object.keys(categories).forEach(key => {
                 this.modal.categoryName = key;
                 this.calculateRowScore(categories[key]);
-                //console.log(key);        // the name of the current key.
+                this.calculateRowPoints(key);
             });           
         },
         calculateTotalScore: function(){
@@ -267,20 +249,6 @@ export default {
                 totalScore = totalScore + parseInt(allScores[i].innerHTML);
             }        
             document.getElementById("total-score").innerHTML = totalScore;
-        },
-        toggleAddFunctionalityOnRow: function(category){
-            let rowName = this.modal.categoryName;
-
-            var cellName = Object.keys(category).find(key => category[key] === "");
-            //console.log(cellName);
-
-            if(typeof cellName == 'undefined'){
-                this.categoryButton[rowName] = null;
-                this.calculateRowPoints(rowName);
-                this.calculateTotalPoints();
-            }
-
-            //todo: when edit feature has been added it needs to be able to restore the add functionality 
         },
         calculateRowPoints: function(rowName){
             let rowNameWithScore = rowName + '-score';
@@ -302,25 +270,34 @@ export default {
                     this.addRowPointsToHtml(rowNameWithScore, rowNameWithPoints, minRowScore, rowName);
                     break;
                 case 'straight':
-                    strikeOutCheck = Object.values(this.categories[rowName]).find(value => value === "/");
-                    //console.log(strikeOutCheck);
-                    if(typeof strikeOutCheck == 'undefined'){
-                        document.getElementById(rowNameWithPoints).innerHTML = 4; 
-                        this.categoryPoints[rowName] = 4;
-                    }
+                    if(typeof Object.values(this.categories[rowName]).find(value => value === "") == 'undefined'){
+                        strikeOutCheck = Object.values(this.categories[rowName]).find(value => value === "/");
+                        if(typeof strikeOutCheck == 'undefined'){
+                            document.getElementById(rowNameWithPoints).innerHTML = 4; 
+                            this.categoryPoints[rowName] = 4;
+                        }
+                        else{
+                            document.getElementById(rowNameWithPoints).innerHTML = 0;                         
+                        } 
+                    }                    
                     else{
                         document.getElementById(rowNameWithPoints).innerHTML = 0;                         
                     }                 
                     break;
                 case 'fullhouse':
-                    strikeOutCheck = Object.values(this.categories[rowName]).find(value => value === "/");
-                    if(typeof strikeOutCheck == 'undefined'){
-                        document.getElementById(rowNameWithPoints).innerHTML = 3; 
-                        this.categoryPoints[rowName] = 3;
-                    }
+                    if(typeof Object.values(this.categories[rowName]).find(value => value === "") == 'undefined'){
+                        strikeOutCheck = Object.values(this.categories[rowName]).find(value => value === "/");
+                        if(typeof strikeOutCheck == 'undefined'){
+                            document.getElementById(rowNameWithPoints).innerHTML = 3; 
+                            this.categoryPoints[rowName] = 4;
+                        }
+                        else{
+                            document.getElementById(rowNameWithPoints).innerHTML = 0;                         
+                        } 
+                    }                    
                     else{
                         document.getElementById(rowNameWithPoints).innerHTML = 0;                         
-                    }  
+                    }                 
                     break;
                 case 'choice':
                     minRowScore = 100;
@@ -365,7 +342,6 @@ export default {
         },
         calculatePointsForTotalScore: function(){
             const totalScore = parseInt(document.getElementById('total-score').innerHTML);
-            //console.log(typeof totalScore + ' : ' + totalScore)
 
             switch(true){
                 case (totalScore < 300): 
