@@ -3,7 +3,7 @@
     <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header bg-color--primary text-light">
         <h5 class="modal-title" id="exampleModalLabel">Insert value in {{modal.categoryName}}</h5>
         <button type="button" class="close" v-on:click="closeModal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -24,31 +24,31 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th id="player" colspan="5">You</th>
-                            <th id="playerScore">Score</th>
-                            <th id="playerPoints">Points</th>
+                            <th class="bg-color--primary text-light font-weight-normal" id="player" colspan="5">Category</th>
+                            <th class="bg-color--primary text-light font-weight-normal" id="playerScore">Score</th>
+                            <th class="bg-color--primary text-light font-weight-normal" id="playerPoints">Points</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr v-for="(value, parent_name) in categories" v-bind:key="parent_name">
-                            <td v-bind:id="parent_name">{{parent_name}}</td>    
+                            <td class="font-weight-bold" v-bind:id="parent_name">{{parent_name}}</td>    
                             <td v-for="(value, name) in categories[parent_name]" 
                                 :key="name" 
                                 v-on:click="addScoreToCell" 
                                 v-bind:id="name"
                                 class="cell-width" 
                                 v-bind:data-row="parent_name">{{value}}</td>
-                            <td v-bind:id="parent_name + '-score'" class="cell-width js-row-score">0</td>
-                            <td v-bind:id="parent_name + '-points'" class="cell-width js-row-points">0</td>
+                            <td v-bind:id="parent_name + '-score'" class="cell-width bg-light js-row-score">0</td>
+                            <td v-bind:id="parent_name + '-points'" class="cell-width bg-light js-row-points">0</td>
                         </tr>                                              
                         <tr>
-                            <td class="scorebg1" colspan="5">Total Score</td>
-                            <td id="total-score" class="scorebg1"></td>
-                            <td id="total-points" class="scorebg1"></td>
+                            <td class="font-weight-bold" colspan="5">Total Score</td>
+                            <td id="total-score" class="bg-light"></td>
+                            <td id="total-points" class="bg-light"></td>
                         </tr>
                         <tr>
-                            <td class="scorebg1" colspan="6">Total Points</td>
-                            <td id="final-points" class="scorebg1" ></td>
+                            <td class="bg-color--secondary text-light" colspan="6">Total Points</td>
+                            <td id="final-points" class="bg-color--secondary text-light" ></td>
                         </tr>
                     </tbody>
                 </table>
@@ -277,11 +277,13 @@ export default {
                             this.categoryPoints[rowName] = 4;
                         }
                         else{
-                            document.getElementById(rowNameWithPoints).innerHTML = 0;                         
+                            document.getElementById(rowNameWithPoints).innerHTML = 0;
+                            this.categoryPoints[rowName] = 0;                         
                         } 
                     }                    
                     else{
-                        document.getElementById(rowNameWithPoints).innerHTML = 0;                         
+                        document.getElementById(rowNameWithPoints).innerHTML = 0;
+                        this.categoryPoints[rowName] = 0;                         
                     }                 
                     break;
                 case 'fullhouse':
@@ -289,14 +291,16 @@ export default {
                         strikeOutCheck = Object.values(this.categories[rowName]).find(value => value === "/");
                         if(typeof strikeOutCheck == 'undefined'){
                             document.getElementById(rowNameWithPoints).innerHTML = 3; 
-                            this.categoryPoints[rowName] = 4;
+                            this.categoryPoints[rowName] = 3;
                         }
                         else{
-                            document.getElementById(rowNameWithPoints).innerHTML = 0;                         
+                            document.getElementById(rowNameWithPoints).innerHTML = 0;  
+                            this.categoryPoints[rowName] = 0;                       
                         } 
                     }                    
                     else{
-                        document.getElementById(rowNameWithPoints).innerHTML = 0;                         
+                        document.getElementById(rowNameWithPoints).innerHTML = 0;
+                        this.categoryPoints[rowName] = 0;                         
                     }                 
                     break;
                 case 'choice':
@@ -414,14 +418,23 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+$primary: #2F8EBD;
+$secondary:#28C9A8;
+
 .cell-width{
     min-width: 50px;
 }
 td::first-letter{
     text-transform: capitalize;
 }
-
 .bg-lightblue{
     background:lightblue;
 }
+.bg-color--primary{
+    background: $primary;
+}
+.bg-color--secondary{
+    background: $secondary;
+}
+
 </style>
