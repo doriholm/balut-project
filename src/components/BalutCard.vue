@@ -38,8 +38,8 @@
                                 v-bind:id="name"
                                 class="cell-width" 
                                 v-bind:data-row="parent_name">{{value}}</td>
-                            <td v-bind:id="parent_name + '-score'" class="cell-width js-row-score"></td>
-                            <td v-bind:id="parent_name + '-points'" class="cell-width js-row-points"></td>
+                            <td v-bind:id="parent_name + '-score'" class="cell-width js-row-score">0</td>
+                            <td v-bind:id="parent_name + '-points'" class="cell-width js-row-points">0</td>
                         </tr>                                              
                         <tr>
                             <td class="scorebg1" colspan="5">Total Score</td>
@@ -192,12 +192,14 @@ export default {
                 //Clean up category tags and input value
                 this.modal.categoryName = "";
                 this.modal.categoryPlace = "";
-                document.getElementById('inputValue').value = "";
+                let inputValue = document.getElementById('inputValue');
+                inputValue.value = "";
+                inputValue.type = "number"
         },
         addScoreToRow: function(){
             let inputValue = document.getElementById('inputValue').value;
 
-            if(inputValue !== ""){
+            // if(inputValue !== ""){
                 //console.log(inputValue);
                 let category = this.$data.categories[this.modal.categoryName];
                 category[this.modal.categoryPlace] = inputValue;
@@ -210,10 +212,10 @@ export default {
                 this.toggleAddFunctionalityOnRow(category);
                          
                 this.closeModal();     
-            }
-            else{
-                //console.log("Missing value");
-            }
+            // }
+            // else{
+            //     //console.log("Missing value");
+            // }
         },
         addStrikeOutToRow: function(){
             let categoryName = this.modal.categoryName
@@ -408,6 +410,19 @@ export default {
             let target = event.target;
             let rowName = target.getAttribute('data-row');
             let cellName = target.id;
+            let inputValue = document.getElementById('inputValue');
+            let cellValue = document.getElementById(cellName).innerHTML;
+
+            if(cellValue === '/'){
+                inputValue.type = 'text';
+                inputValue.value = '/';
+            }
+            else{
+                inputValue.value = cellValue;
+            }
+
+            // Highlight cell and add a small delay when opening modal. Transition for the modal is broken. Should be Bootstrap Fade
+            //document.getElementById(cellName).classList.add('bg-lightblue');
 
             this.openModal();
 
@@ -428,5 +443,9 @@ export default {
 }
 td::first-letter{
     text-transform: capitalize;
+}
+
+.bg-lightblue{
+    background:lightblue;
 }
 </style>
